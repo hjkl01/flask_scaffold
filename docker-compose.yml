@@ -1,0 +1,53 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:11-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: 'procloud'
+      POSTGRES_PASSWORD: 'procloud'
+      POSTGRES_DB: 'postgres'
+    # - psql -U postgres -c 'create database src;'
+    networks:
+      - procloud
+    volumes:
+      - ./config/timezone:/etc/timezone
+      - ./config/localtime:/etc/localtime
+      - ./postgres_data:/var/lib/postgresql/data
+
+  src:
+    build: src 
+    networks:
+      - procloud
+    depends_on:
+      - db
+    links:
+      - db
+    restart: unless-stopped
+    volumes:
+      - ./src:/app:rw
+      - ./config/timezone:/etc/timezone
+      - ./config/localtime:/etc/localtime
+
+  nginx:
+    build: nginx
+    depends_on:
+      - src
+    restart: unless-stopped
+    networks:
+      - procloud
+    links:
+      - src
+    ports:
+      - 80:80
+    volumes:
+      - ./nginx_log:/var/log/nginx
+      - ./config/timezone:/etc/timezone
+      - ./config/localtime:/etc/localtime
+
+
+networks:
+
+  procloud:
+    driver: bridge

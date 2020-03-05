@@ -1,0 +1,15 @@
+flask
+flask_login
+flask_babelex
+python-dotenv
+
+gevent
+gunicorn==19.9.0
+loguru
+uuid
+flask_sqlalchemy 
+psycopg2-binary
+aliyun-python-sdk-core
+
+records
+faker
