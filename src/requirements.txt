@@ -4,7 +4,7 @@ flask_babelex
 python-dotenv
 
 gevent
-gunicorn==19.9.0
+gunicorn
 loguru
 uuid
 flask_sqlalchemy 
